@@ -1,0 +1,6 @@
+[test_server]
+test-01
+test-02
+
+[app_server]
+aws

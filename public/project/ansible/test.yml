@@ -1,0 +1,107 @@
+- hosts: test_server
+  connection: docker
+  tasks:
+    - name: create user
+      user: 
+        name: "test"
+        createhome: yes
+        password: "{{ 'test' | password_hash('sha512')}}"
+        groups: "wheel"
+        shell: /bin/bash
+
+    - name: create directory
+      file: 
+        path: /home/test/
+        state: directory 
+        owner: test 
+        group: wheel 
+        mode: 0755
+
+    - name: create file
+      file:
+        path: /home/test/test.txt
+        state: touch
+        mode: 0644
+
+    - name: create symblic link
+      file:
+        src: /home/test/test.txt
+        dest: /home/test/link.txt
+        state: link
+ 
+- hosts: app_server     
+  become: yes #sudoで実行
+  tasks:
+    - name: create user
+      user:
+        name: "test"
+        createhome: yes
+        password: "{{ 'test' | password_hash('sha512')}}"
+        groups: "wheel"
+        shell: /bin/bash
+
+    - name: create directory
+      file:
+        path: /home/test/src
+        state: directory
+        owner: test
+        group: wheel
+        mode: 0755
+
+    - name: get JDK installer
+      get_url:
+        url: http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.rpm
+        dest: /home/test/work
+        headers: "Cookie:' gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie'"
+        validate_certs: no
+        checksum: "sha256: 3d1e8cc66f4fd77acef6093329d5dd95bd06e4a03926c52df794f311a0c093f8"
+
+    - name: install JDK
+      apt:
+        name: openjdk-8-jre
+        state: present
+
+    - name: delete installer
+      file:
+        state: absent
+        path: /home/test/work/jdk-8u131-linux-x64.rpm
+
+    - name: create tomcat user
+      user:
+        name: tomcat
+        password: "{{ 'tomcat' | password_hash('sha512')}}"
+      become: yes
+
+    - name: create directory
+      file:
+        path: /home/tomcat
+        state: directory
+        owner: tomcat
+        group: tomcat
+        mode: 0755
+
+    - name: get apache tomcat installer
+      get_url:
+        url: http://ftp.riken.jp/net/apache/tomcat/tomcat-8/v8.5.57/bin/apache-tomcat-8.5.57.tar.gz
+        dest: ~/apache-tomcat-8.5.57.tar.gz
+        #checksum: "sha1:67650d6deda0c0ba9e8c7db7fe4006c35d6dc7db"
+        checksum: "sha1:6f48f47b58ab3c1c8e15a7965bc73c45c9965405."
+      become: yes
+      become_user: tomcat
+
+    - name: install apache tomcat
+      unarchive:
+        src: ~/apache-tomcat-8.5.57.tar.gz
+        dest:  ~/
+        remote_src: yes
+      become: yes
+      become_user: tomcat
+
+    - name: delete installer
+      file:
+        state: absent
+        path: ~/apache-tomcat-8.5.57.tar.gz
+      become: yes
+      become_user: tomcat
+
+

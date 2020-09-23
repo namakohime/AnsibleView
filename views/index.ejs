@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuejs-magnifier@0.1.1/dist/magnifiercomponent.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-json-tree-view@2.1.4/dist/vue-json-tree-view.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title><%= __("title") %></title>
+  </head>
+  <body>
+    <div id="app" class="culumns">
+
+      <div id="page-header">
+      　　<section class="hero is-dark is-bold">
+　　　　　　  <div class="hero-body">
+　　　　　　    <div class="container title-area">
+　　　　　　      <h1 class="title">
+　　　　　　        <%= __("title") %>
+　　　　　　      </h1>
+                <h2 class="subtitle">
+　　　　　　        <%= __("sub-title") %>
+　　　　　　      </h2>
+　　　　　　    </div>
+              <div class="container lang-select-area">
+                <!--%= __("lang-select") %-->
+                <i class="fa fa-globe" aria-hidden="true"></i>
+                <select name="lang" v-model="selected" @change="selectLanguage()">
+                  <option disabled value=""><%= __("select-message") %></option>
+                  <option value="ja"><%= __("lang-ja") %></option>
+                  <option value="en"><%= __("lang-en") %></option>
+                </select>
+  　　　　　　  </div>
+　　　　　　  </div>
+　　　　　　</section>
+　　　　</div>
+      
+      <div id="project-list" class="column is-4 is-inline-block" style="vertical-align: top">
+        <form id="select-project" @submit.prevent="getProjectInfo">
+      　　  <label class="subtitle"><i class="fa fa-paw"> <%= __("project-list") %></i></label>
+      　　  <div class="table-area">
+      　　      <table class="table is-striped is-hoverable is-fullwidth">
+      　　        <thead>
+      　　          <tr>
+      　　            <th><%= __("project-no") %></th>
+      　　            <th><%= __("project-name") %></th>
+      　　          <tr>
+      　　        </thead>
+      　　        <tbody>
+      　　          <tr v-for="(project,index) in projects.name" :key="index" @click="selectProject(index)">
+      　　            <td :class="isSelectProject && SelectProjectNo === index ? 'is-info' : ''">{{ projects.no[index] }}</td>
+      　　            <td :class="isSelectProject && SelectProjectNo === index ? 'is-info' : ''">{{ projects.name[index] }}</td>
+      　　          </tr>
+      　　        </tbody>
+      　　      </table>
+      　　    </div>
+      　　    <div v-show="isSelectProject">
+      　　      <button class="button is-info"><%= __("button-select") %></button>
+      　　    </div>
+         </form>
+      </div>
+      
+      <div id="host-info"class="column is-3 is-inline-block" style="vertical-align: top">
+        <label class="subtitle"><i class="fa fa-paw"> <%= __("host-info") %></i></label>
+        <form id="update-hosts" @submit.prevent="updateHostInfo">
+          <textarea v-model="hostInfo" placeholder="update host information" rows="13" required></textarea>
+          <div v-show="hostInfo.length">
+      　　   <button class="button is-info"><%= __("button-update") %></button>
+      　　 </div>
+        </form>
+      </div>
+      
+      <div id="playbook-info"class="column is-4 is-inline-block" style="vertical-align: top">
+        <label class="subtitle"><i class="fa fa-paw"> <%= __("playbook-info") %></i> 
+          <a href=""><i class="fa fa-arrows-alt"></i></a></label>
+        <form id="update-playbook" @submit.prevent="updateplaybookInfo">
+          <textarea v-model="playbookInfo" placeholder="update playbook information" rows="13" required></textarea>
+          <div v-show="playbookInfo.length">
+      　    <button class="button is-info"><%= __("button-update") %></button>
+      　  </div>
+        </form>
+      </div>
+      
+      <div id="playbook-list"class="column is-4 is-inline-block" style="vertical-align: top">
+        <label class="subtitle"><i class="fa fa-paw"> <%= __("playbook-list") %></i></label>
+        <div class="playbook-area">
+          <tree-view :data="jsonSource" :options="{maxDepth: 3}"></tree-view>
+        </div>
+      </div>
+      
+      <div id="condole-info"class="column is-7 is-inline-block" style="vertical-align: top">
+        <label class="subtitle"><i class="fa fa-paw"> <%= __("console") %></i></label>
+        <div class="console-area">
+          {{ consoleinfo }}
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="./main.js"></script>
+</html>

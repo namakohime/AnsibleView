@@ -1,0 +1,18 @@
+{
+	"title": "Ansible Viewer",
+	"sub-title": "The simple view and controll inventrys with a playbook.",
+	"project-list": "Select Project",
+	"host-info": "Edit Hosts",
+	"playbook-info": "Edit Playbook",
+	"playbook-list": "Playbook Tree",
+	"project-no": "No",
+	"project-name": "Project Name",
+	"button-select": "Execute",
+	"project-select": "project-select",
+	"button-update": "Update",
+	"console": "Console",
+	"lang-select": "Language",
+	"lang-ja": "Jananese",
+	"lang-en": "English",
+	"select-message": "Language"
+}
