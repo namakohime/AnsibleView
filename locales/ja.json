@@ -14,5 +14,8 @@
 	"lang-select": "言語",
 	"lang-ja": "日本語",
 	"lang-en": "英語",
-	"select-message": "言語選択"
+	"select-message": "言語選択",
+	"confirmation-message": "このPlaybookを実行してもよろしいですか？",
+	"button-yes": "はい",
+	"button-no": "いいえ"
 }

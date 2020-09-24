@@ -24,7 +24,7 @@
 　　　　　　  <div class="hero-body">
 　　　　　　    <div class="container title-area">
 　　　　　　      <h1 class="title">
-　　　　　　        <%= __("title") %>
+　　　　　　        <a href=""><%= __("title") %></a>
 　　　　　　      </h1>
                 <h2 class="subtitle">
 　　　　　　        <%= __("sub-title") %>
@@ -44,31 +44,36 @@
 　　　　</div>
       
       <div id="project-list" class="column is-4 is-inline-block" style="vertical-align: top">
-        <form id="select-project" @submit.prevent="getProjectInfo">
+        <form id="select-project" @submit.prevent="execPlaybook">
       　　  <label class="subtitle"><i class="fa fa-paw"> <%= __("project-list") %></i></label>
       　　  <div class="table-area">
-      　　      <table class="table is-striped is-hoverable is-fullwidth">
-      　　        <thead>
-      　　          <tr>
-      　　            <th><%= __("project-no") %></th>
-      　　            <th><%= __("project-name") %></th>
-      　　          <tr>
-      　　        </thead>
-      　　        <tbody>
-      　　          <tr v-for="(project,index) in projects.name" :key="index" @click="selectProject(index)">
-      　　            <td :class="isSelectProject && SelectProjectNo === index ? 'is-info' : ''">{{ projects.no[index] }}</td>
-      　　            <td :class="isSelectProject && SelectProjectNo === index ? 'is-info' : ''">{{ projects.name[index] }}</td>
-      　　          </tr>
-      　　        </tbody>
-      　　      </table>
-      　　    </div>
-      　　    <div v-show="isSelectProject">
-      　　      <button class="button is-info"><%= __("button-select") %></button>
-      　　    </div>
+      　　     <table class="table is-striped is-hoverable is-fullwidth">
+      　　       <thead>
+      　　         <tr>
+      　　           <th><%= __("project-no") %></th>
+      　　           <th><%= __("project-name") %></th>
+      　　         <tr>
+      　　       </thead>
+      　　       <tbody>
+      　　         <tr v-for="(project,index) in projects.name" :key="index" @click="selectProject(index)">
+      　　           <td :class="isSelectProject && SelectProjectNo === index ? 'is-info' : ''">{{ projects.no[index] }}</td>
+      　　           <td :class="isSelectProject && SelectProjectNo === index ? 'is-info' : ''">{{ projects.name[index] }}</td>
+      　　         </tr>
+      　　       </tbody>
+      　　     </table>
+      　　   </div>
+      　　   <div v-show="isSelectProject">
+      　　     <a hred="#confirmation"　class="button is-info" @click="openSubwindow()"><%= __("button-select") %></a>
+      　　   </div>
+            <dialog id="confirmation" class="modal-body">
+             <div class=""><%= __("confirmation-message") %></div>
+             <button class="button is-info"><%= __("button-yes") %></button>
+             <button class="button is-warn" @click="closeSubwindow()"><%= __("button-no") %></button>
+           </dialog>
          </form>
       </div>
       
-      <div id="host-info"class="column is-3 is-inline-block" style="vertical-align: top">
+      <div id="host-info" class="column is-3 is-inline-block" style="vertical-align: top">
         <label class="subtitle"><i class="fa fa-paw"> <%= __("host-info") %></i></label>
         <form id="update-hosts" @submit.prevent="updateHostInfo">
           <textarea v-model="hostInfo" placeholder="update host information" rows="13" required></textarea>
@@ -78,7 +83,7 @@
         </form>
       </div>
       
-      <div id="playbook-info"class="column is-4 is-inline-block" style="vertical-align: top">
+      <div id="playbook-info" class="column is-4 is-inline-block" style="vertical-align: top">
         <label class="subtitle"><i class="fa fa-paw"> <%= __("playbook-info") %></i> 
           <a href=""><i class="fa fa-arrows-alt"></i></a></label>
         <form id="update-playbook" @submit.prevent="updateplaybookInfo">
@@ -89,20 +94,22 @@
         </form>
       </div>
       
-      <div id="playbook-list"class="column is-4 is-inline-block" style="vertical-align: top">
+      <div id="playbook-list" class="column is-4 is-inline-block" style="vertical-align: top">
         <label class="subtitle"><i class="fa fa-paw"> <%= __("playbook-list") %></i></label>
         <div class="playbook-area">
           <tree-view :data="jsonSource" :options="{maxDepth: 3}"></tree-view>
         </div>
       </div>
       
-      <div id="condole-info"class="column is-7 is-inline-block" style="vertical-align: top">
+      <div id="condole-info" class="column is-7 is-inline-block" style="vertical-align: top">
         <label class="subtitle"><i class="fa fa-paw"> <%= __("console") %></i></label>
         <div class="console-area">
           {{ consoleinfo }}
         </div>
       </div>
+
     </div>
+    
   </body>
   <script type="text/javascript" src="./main.js"></script>
 </html>

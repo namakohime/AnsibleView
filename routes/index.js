@@ -78,24 +78,21 @@ router.get('/api/ansible-playbook-info/', function(req, res, next) {
   try {
     const path = projectPath + req.query.prjName + '/test.yml'
     let text = fs.readFileSync( path, 'utf8')
-    const lines = text.toString().split('¥n')
-
-    const yamlData = fs.readFileSync(path, 'utf-8')
-    const data = jsYaml.safeLoad(yamlData)
-    console.log(data)
-
-    exec(cmd, (err, stdout, stderr) => {
-    if (err) {
-      next(err)
-    } else {
-      res.sendStatus(200)
-    }
-  })
-    //for (let line of lines) {
-    //  infos.line.push(line)
-    //}
+    let lines = text.toString().split('\n')
+    lines.forEach(line => {
+      infos.line.push(line)
+    })
     res.header('Content-Type', 'application/json; charset=utf-8')
-    res.json(data)
+    res.json(infos)
+    //const yamlData = fs.readFileSync(path, 'utf-8')
+    //const data = jsYaml.safeLoad(yamlData)
+    //console.log(data)
+    //exec(cmd, (err, stdout, stderr) => {
+    //if (err) {
+    //  next(err)
+    //} else {
+    //  res.sendStatus(200)
+    //}
   } catch (err) {
     next(err)
   }

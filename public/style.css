@@ -16,6 +16,17 @@ textarea {
   height: 250px;
 }
 
+#confirmation {
+  padding: 10px;
+  border: 0;
+  border-radius: 0.6rem;
+  box-shadow: 0 0 1em black;
+}
+
+#confirmation::backdrop {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
 .title-area {
   text-align: center;
   left: -10px;
